@@ -1,6 +1,11 @@
 import { defineConfig } from 'vite';
 import { glob } from 'glob';
 import { relative, extname } from 'path';
+import { readFileSync } from 'fs';
+
+// Read package.json to get the version
+const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
+const version = packageJson.version;
 
 // Find all .ts files in src, excluding .d.ts
 const tsFiles = glob.sync('src/**/*.ts').filter(file => !file.endsWith('.d.ts'));
@@ -25,7 +30,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         dir: 'dist',
-        entryFileNames: '[name].js',
+        entryFileNames: `[name].v${version}.js`,
       },
     },
   },
